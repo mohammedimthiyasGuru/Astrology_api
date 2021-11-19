@@ -47,15 +47,16 @@ router.get('/getlist', function (req, res) {
 });
 
 
-router.post('/edit', function (req, res) {
-        yantrasModel.findByIdAndUpdate(req.body.Activity_id, req.body, {new: true}, function (err, UpdatedDetails) {
+router.post('/edit', async function (req, res) {
+  var yantra = await yantrasModel.findOne({yanid : req.body.yanid});
+        yantrasModel.findByIdAndUpdate(yantra._id, req.body, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
              res.json({Status:"Success",Message:"Functiondetails Updated", Data : UpdatedDetails ,Code:200});
         });
 });
 // // DELETES A USER FROM THE DATABASE
-router.post('/delete', function (req, res) {
-      yantrasModel.findByIdAndRemove(req.body.Activity_id, function (err, user) {
+router.post('/delete', async function (req, res) {
+      await yantrasModel.findByIdAndDelete(req.body._id, function (err, yantra) {
           if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
           res.json({Status:"Success",Message:"SubFunction Deleted successfully", Data : {} ,Code:200});
       });

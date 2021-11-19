@@ -47,15 +47,16 @@ router.get('/getlist', function (req, res) {
 });
 
 
-router.post('/edit', function (req, res) {
-        report_janamModel.findByIdAndUpdate(req.body.Activity_id, req.body, {new: true}, function (err, UpdatedDetails) {
+router.post('/edit',async function (req, res) {
+  var janam = await report_janamModel.findOne({janid : req.body.janid});
+        report_janamModel.findByIdAndUpdate(janam._id, req.body, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
              res.json({Status:"Success",Message:"Functiondetails Updated", Data : UpdatedDetails ,Code:200});
         });
 });
 // // DELETES A USER FROM THE DATABASE
-router.post('/delete', function (req, res) {
-      report_janamModel.findByIdAndRemove(req.body.Activity_id, function (err, user) {
+router.post('/delete',async function (req, res) {
+  await report_janamModel.findByIdAndDelete(req.body._id, function (err, user) {
           if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
           res.json({Status:"Success",Message:"SubFunction Deleted successfully", Data : {} ,Code:200});
       });

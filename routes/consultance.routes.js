@@ -57,15 +57,18 @@ router.get('/:id', function (req, res) {
 
 
 
-router.post('/edit', function (req, res) {
-        consultanceModel.findByIdAndUpdate(req.body.Activity_id, req.body, {new: true}, function (err, UpdatedDetails) {
+router.post('/edit', async function (req, res) {
+  var consultance_detail = await consultanceModel.findOne({consulid : req.body.consulid});
+        consultanceModel.findByIdAndUpdate(consultance_detail._id, req.body, {new: true}, function (err, UpdatedDetails) {
+          console.log(UpdatedDetails,"checkkk")
             if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
              res.json({Status:"Success",Message:"consultanceModel Updated", Data : UpdatedDetails ,Code:200});
         });
 });
 // // DELETES A USER FROM THE DATABASE
-router.post('/delete', function (req, res) {
-      consultanceModel.findByIdAndRemove(req.body.Activity_id, function (err, user) {
+router.post('/delete', async function (req, res) {
+   await consultanceModel.findByIdAndDelete(req.body._id, function (err, consultance) {
+        console.log(consultance,"consultance")
           if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
           res.json({Status:"Success",Message:"consultanceModel Deleted successfully", Data : {} ,Code:200});
       });

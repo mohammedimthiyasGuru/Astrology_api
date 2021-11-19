@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -96,7 +97,10 @@ var OrderDetails = require('./routes/OrderDetails.routes');
 
 var BaseUrl = "http://54.191.47.199:3000/api"; 
 const mongoose = require('mongoose'); 
-mongoose.connect('mongodb://localhost:27017/Salveo'); 
+mongoose.connect('mongodb://localhost:27017/Salveo', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}); 
 var db = mongoose.connection; 
 db.on('error', console.log.bind(console, "connection error")); 
 db.once('open', function(callback){ 
@@ -104,6 +108,7 @@ db.once('open', function(callback){
 }) 
 
 var app = express();
+app.use(cors());
 
 app.use(fileUpload());
 app.use(responseMiddleware());
